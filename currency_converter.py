@@ -2,57 +2,66 @@
 
 running = True
 option = ""
-possible_inputs = ["1", "2", "3", "end"]
-empty_input = True
+exchange_name = ["dollars to naira", "naira to dollars", "dollars to pounds", "pounds to dollars", 
+				   "naira to pounds", "pounds to naira"]
+
+exchange_rate = {"dollars to naira": 411, "naira to dollars": 0.0024, "dollars to pounds": 0.73, "pounds to dollars": 1.36,
+				 "naira to pounds": 0.0018 , "pounds to naira": 560.84}
+menu = True
+menu_input = False
+convert = False
+rate = ""
+amount = ""
 initial_currency = ""
+converted_currency = ""
 
 while running:
-	if empty_input:
-		option = input("Type in the index of the exchange medium you want to use"
-						"\n1. Dollars -> Naira\n2. Naira -> Dollars\n3. Dollars -> Pounds"
-						"\nType 'end' to quit the converter\n")
+	if menu:
+		print("Type in the index of the exchange medium you want to use"
+			  "\n1. Dollars -> Naira\n2. Naira -> Dollars\n3. Dollars -> Pounds\n4. Pounds -> Dollars"
+			  "\n5. Naira -> Pounds\n6. Pounds -> Naira\n7. Update Converter\nType 'end' to quit the converter")
+		menu = False
+		menu_input = True
+
+	if menu_input:
+		option = input()
 		option = option.strip()
 		option = option.lower()
-		if option in possible_inputs:
-			if option == "end":
-				running = False
-			empty_input = False
+		if option == "end":
+			break
 		else:
-			print("That is not a valid input, Pls enter a valid input!")
-
-	if not empty_input:
-		if option == "1":
-			initial_currency = input("Pls enter the amount you want to convert to Naira\n")
-			initial_currency = initial_currency.strip()
 			try:
-				initial_currency = int(initial_currency)
-			except ValueError:
-				print("That is not a valid input, Input must be an integer")
+				option = int(option)
+			except:
+				print("invalid input, pls enter a valid input")
 			else:
-				new_currency = initial_currency * 388
-				print(str(new_currency) + " Naira!")
-				empty_input = True
+				if option in range(1, 6):
+					option = option - 1
+					menu_input = False
+					convert = True
 
-		if option == "2":
-			initial_currency = input("Pls enter the amount you want to convert to Naira\n")
-			initial_currency = initial_currency.strip()
-			try:
-				initial_currency = int(initial_currency)
-			except ValueError:
-				print("That is not a valid input, Input must be an integer")
-			else:
-				new_currency = initial_currency * 388
-				print(str(new_currency) + " Naira!")
-				empty_input = True
+	if convert:
+		for name in exchange_name:
+			if exchange_name.index(name) == option:
+				rate = exchange_rate[name]
+				initial_currency = input("enter the amount you want to convert from " + name + ": ")
+				try:
+					amount = float(initial_currency)
+				except:
+					print("invalid input, pls enter a number")
+				else:
+					converted_currency = rate * amount
+					converted_currency = str(converted_currency)
+					if converted_currency[-2:] == ".0":
+						converted_currency = round(float(converted_currency))
+					else:
+						converted_currency = float(converted_currency)
+					print(str(initial_currency) + " converted from " + name + " is equals to " + str(converted_currency) + "\n")
+					menu = True
+					menu_input = False
+					convert = False
 
-		if option == "3":
-			initial_currency = input("Pls enter the amount you want to convert to Naira\n")
-			initial_currency = initial_currency.strip()
-			try:
-				initial_currency = int(initial_currency)
-			except ValueError:
-				print("That is not a valid input, Input must be an integer")
-			else:
-				new_currency = initial_currency * 388
-				print(str(new_currency) + " Naira!")
-				empty_input = True
+# one dolllar is 0.73 pound sterling
+# one pound is 1.36 us dollars
+# one pound sterling equals 560.84 naira
+# one naira equals 0.0018 pound sterling
